@@ -1,0 +1,44 @@
+One page scroll layout plugin by Jung
+
+Program design
+1. 필수 기능
+	1) 영역 브라우저 상하값 자동 지정
+		* 실행 이벤트: load, resize
+		* 작동 함수: init()
+	2) 영역만큼 스크롤 애니메이션
+		* 실행 이벤트: mousewheel, keydown, swipedown, swipeup
+		* 작동 함수: animateScr()
+
+2. 함수 상세
+	1) init()
+		* 기능: 영역 브라우저 상하값 자동 지정
+		* 핸들러1: 각 영역은 window height값 자동 적용
+
+	2) animateScr( updown )
+		* 기능: 스크롤 애니메이션 실행
+		* 핸들러: updown에 따라 #film 영역 margin값 조절
+			+ 조건1: updown.move == true && updown.to == "bottom"
+			+ 조건2: updown.omvoe
+	
+	3) moveTo(e)
+		* 기능: animateScrl( moveTo(e) ) 형태로 방향값 반환
+		* 핸들러:
+			+ e.type값을 반환
+			+ 조건1: (e.type == mousewheel || e.type == DOMMouseScroll)
+				+ 조건1-1: e.originalEvent.wheelDelta < 0 일 때
+					+조건1-1-1: $(#film).css(marginTop) == "0px"라면, return "bottom";
+					+조건1-1-2: 아니라면 return "down";
+				+ 조건1-2: e.originalEvent.wheelDelta > 0 일 때
+					+조건1-2-1:  parseInt( $(#film).css(marginTop) ) == -$(window).height() * ($("#film .area").length -1)이라면, return "top";
+					+조건1-2-2: 아니라면 return "up";
+			+ 조건2: (e.type == keydown)
+				+ var pressedKey = String.prototype.fromCharCode(e.which);
+				+조건2-1: pressedKey == "&" || pressedKey == pageDown
+					+조건2-1-1: $(#film).css(marginTop) == "0px"라면, return "bottom";
+					+조건2-1-2: 아니라면 return "down";
+				+조건2-2: pressedKey == "(" || pressedKey == pageUp
+					+조건2-2-1:  parseInt( $(#film).css(marginTop) ) == -$(window).height() * ($("#film .area").length -1)이라면, return {move:true, to: top};
+					+조건2-2-2: 아니라면 return "up";
+
+
+
